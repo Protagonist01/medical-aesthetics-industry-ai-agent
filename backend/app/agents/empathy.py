@@ -1,20 +1,27 @@
-def analyze_sentiment(text: str) -> dict:
-    # Mock sentiment analysis
-    anxiety_keywords = [
-        "hurt",
-        "pain",
-        "scared",
-        "nervous",
-        "needle",
-        "recovery",
-        "downtime",
-    ]
-    is_anxious = any(k in text.lower() for k in anxiety_keywords)
-    return {"is_anxious": is_anxious, "score": 0.9 if is_anxious else 0.1}
+"""
+Empathy Guardrail Module
+Detects user anxiety and provides reassuring responses.
+"""
 
 
-def empathy_guardrail(text: str):
-    sentiment = analyze_sentiment(text)
-    if sentiment["is_anxious"]:
-        return "I completely understand your concern. Patient comfort is our absolute priority. We use a medical-grade numbing protocol and offer Pro-Nox (laughing gas) to ensure you feel at ease. Would you like to see our comfort menu?"
+def analyze_sentiment(text: str) -> str:
+    """Quick sentiment analysis using keyword detection."""
+    anxiety_keywords = ["scared", "nervous", "afraid", "worried", "anxious", "pain", "hurt"]
+    text_lower = text.lower()
+    for keyword in anxiety_keywords:
+        if keyword in text_lower:
+            return "anxious"
+    return "neutral"
+
+
+def empathy_guardrail(user_message: str) -> str:
+    """Check if user needs empathetic response before proceeding."""
+    sentiment = analyze_sentiment(user_message)
+    if sentiment == "anxious":
+        return (
+            "I completely understand your concerns - it's totally natural to feel that way! "
+            "Our Comfort Protocol includes numbing cream, Pro-Nox (laughing gas), and "
+            "gentle techniques that most clients say make the experience much easier than expected. "
+            "Would you like to know more about how we keep you comfortable?"
+        )
     return None

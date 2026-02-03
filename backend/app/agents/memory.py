@@ -1,23 +1,31 @@
-from typing import Dict, List
+"""
+Memory Manager - In-Memory Chat History
+Manages session-based conversation history.
+"""
+
+from typing import List, Dict
 
 
 class MemoryManager:
+    """Manages chat history per session."""
+    
     def __init__(self):
-        # In-memory store: {session_id: [messages]}
-        self._sessions: Dict[str, List[dict]] = {}
-
+        self._storage: Dict[str, List[dict]] = {}
+    
     def get_history(self, session_id: str) -> List[dict]:
-        return self._sessions.get(session_id, [])
-
+        """Get chat history for a session."""
+        return self._storage.get(session_id, [])
+    
     def add_message(self, session_id: str, message: dict):
-        if session_id not in self._sessions:
-            self._sessions[session_id] = []
-        self._sessions[session_id].append(message)
+        """Add a message to session history."""
+        if session_id not in self._storage:
+            self._storage[session_id] = []
+        self._storage[session_id].append(message)
+    
+    def clear(self, session_id: str):
+        """Clear history for a session."""
+        self._storage[session_id] = []
 
-    def clear_history(self, session_id: str):
-        if session_id in self._sessions:
-            del self._sessions[session_id]
 
-
-# Global instance
+# Global singleton
 memory = MemoryManager()
